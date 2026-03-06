@@ -42,11 +42,15 @@ interface BaseDatabaseProps extends PlanetScaleProps {
   delete?: boolean;
 
   /**
-   * The region where the database will be created (create only)
+   * The region where the database will be created (create only).
+   *
+   * @see https://planetscale.com/docs/concepts/regions
    */
   region?: {
     /**
-     * The slug identifier of the region
+     * The slug identifier of the region (e.g. "us-east", "eu-west", "gcp-us-central1")
+     *
+     * @see https://planetscale.com/docs/concepts/regions#available-regions
      */
     slug: string;
   };
@@ -217,6 +221,20 @@ export type Database = DatabaseProps & {
    * The organization of the database
    */
   organization: string;
+
+  /**
+   * The region of the database as reported by PlanetScale.
+   *
+   * @see https://planetscale.com/docs/concepts/regions
+   */
+  region: {
+    /**
+     * The slug identifier of the region (e.g. "us-east", "eu-west", "gcp-us-central1")
+     *
+     * @see https://planetscale.com/docs/concepts/regions#available-regions
+     */
+    slug: string;
+  };
 };
 
 /**
@@ -331,6 +349,49 @@ export const Database = Resource(
           cause: getResponse.error,
         });
       }
+
+      // Validate immutable properties match if specified
+      const actualKind = getResponse.data.kind;
+      if (props.kind && actualKind !== props.kind) {
+        throw new Error(
+          `Database "${databaseName}" has kind "${actualKind}" but expected "${props.kind}". ` +
+            `Database kind cannot be changed after creation.`,
+        );
+      }
+
+      if (props.region) {
+        const actualSlug = getResponse.data.region.slug;
+        if (actualSlug !== props.region.slug) {
+          throw new Error(
+            `Database "${databaseName}" is in region "${actualSlug}" but expected "${props.region.slug}". ` +
+              `PlanetScale database regions cannot be changed after creation. ` +
+              `Either update the region in your configuration to match, or create a new database in the correct region.`,
+          );
+        }
+      }
+
+      if (props.kind === "postgresql" && props.arch) {
+        const defaultBranch = props.defaultBranch || "main";
+        const branchInfo = await api.getBranch({
+          path: {
+            organization,
+            database: databaseName,
+            branch: defaultBranch,
+          },
+          throwOnError: false,
+        });
+        if (branchInfo.data?.cluster_architecture) {
+          const actualArch =
+            branchInfo.data.cluster_architecture === "aarch64" ? "arm" : "x86";
+          if (actualArch !== props.arch) {
+            throw new Error(
+              `Database "${databaseName}" has architecture "${actualArch}" but expected "${props.arch}". ` +
+                `Database architecture cannot be changed after creation.`,
+            );
+          }
+        }
+      }
+
       // Update database settings
       // If updating to a non-'main' default branch, create it first
       if (props.defaultBranch && props.defaultBranch !== "main") {
@@ -423,6 +484,7 @@ export const Database = Resource(
         updatedAt: data.updated_at,
         htmlUrl: data.html_url,
         organization,
+        region: { slug: data.region.slug },
       };
     }
 
@@ -546,6 +608,7 @@ export const Database = Resource(
           updatedAt: updatedData.updated_at,
           htmlUrl: updatedData.html_url,
           organization,
+          region: { slug: updatedData.region.slug },
         };
       }
     }
@@ -573,6 +636,7 @@ export const Database = Resource(
       updatedAt: data.updated_at,
       htmlUrl: data.html_url,
       organization,
+      region: { slug: data.region.slug },
     };
   },
 );
