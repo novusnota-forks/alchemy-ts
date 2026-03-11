@@ -1,3 +1,19 @@
+## v0.88.0
+
+### &nbsp;&nbsp;&nbsp;🚀 Features
+
+- Handle existing Docker network creation gracefully &nbsp;-&nbsp; by **Alec Larson** in https://github.com/alchemy-run/alchemy/issues/1349 [<samp>(87724)</samp>](https://github.com/alchemy-run/alchemy/commit/877249f1)
+- **cloudflare**:
+  - Add new steps limit option for Workflows &nbsp;-&nbsp; by **Jan Henning** in https://github.com/alchemy-run/alchemy/issues/1355 [<samp>(c8182)</samp>](https://github.com/alchemy-run/alchemy/commit/c8182ec8)
+  - R2BucketNotifications &nbsp;-&nbsp; by **Sam Goodwin** in https://github.com/alchemy-run/alchemy/issues/1359 [<samp>(df3b6)</samp>](https://github.com/alchemy-run/alchemy/commit/df3b6e11)
+- **planetscale**:
+  - Support postgres extensions &nbsp;-&nbsp; by **Michael K** in https://github.com/alchemy-run/alchemy/issues/1350 [<samp>(84da2)</samp>](https://github.com/alchemy-run/alchemy/commit/84da24e5)
+  - Check unchangeable props with adopt: true &nbsp;-&nbsp; by **Misha Kaletsky** in https://github.com/alchemy-run/alchemy/issues/1357 [<samp>(ca29d)</samp>](https://github.com/alchemy-run/alchemy/commit/ca29de34)
+
+##### &nbsp;&nbsp;&nbsp;&nbsp;[View changes on GitHub](https://github.com/alchemy-run/alchemy/compare/v0.87.0...v0.88.0)
+
+---
+
 ## v0.87.0
 
 ### &nbsp;&nbsp;&nbsp;🚀 Features
