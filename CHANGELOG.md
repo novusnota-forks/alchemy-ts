@@ -1,3 +1,11 @@
+## v0.89.0
+
+*No significant changes*
+
+##### &nbsp;&nbsp;&nbsp;&nbsp;[View changes on GitHub](https://github.com/alchemy-run/alchemy/compare/v0.88.0...v0.89.0)
+
+---
+
 ## v0.88.0
 
 ### &nbsp;&nbsp;&nbsp;🚀 Features
