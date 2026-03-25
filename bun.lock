@@ -485,6 +485,12 @@
         "ws": "^8.18.3",
       },
     },
+    "examples/cloudflare-hello-world-worker": {
+      "name": "cloudflare-hello-world-worker",
+      "dependencies": {
+        "alchemy": "workspace:*",
+      },
+    },
     "examples/cloudflare-livestore": {
       "name": "example-cloudflare-livestore",
       "version": "0.0.0",
@@ -2984,6 +2990,8 @@
     "cloudflare-container": ["cloudflare-container@workspace:examples/cloudflare-container"],
 
     "cloudflare-durable-object-websocket": ["cloudflare-durable-object-websocket@workspace:examples/cloudflare-durable-object-websocket"],
+
+    "cloudflare-hello-world-worker": ["cloudflare-hello-world-worker@workspace:examples/cloudflare-hello-world-worker"],
 
     "cloudflare-nextjs": ["cloudflare-nextjs@workspace:examples/cloudflare-nextjs"],
 
