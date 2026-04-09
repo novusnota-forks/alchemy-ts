@@ -1,3 +1,24 @@
+## v0.91.0
+
+### &nbsp;&nbsp;&nbsp;🚨 Breaking Changes
+
+- **cloudflare**: Scope workflow names with app and stage &nbsp;-&nbsp; by **Michael K** in https://github.com/alchemy-run/alchemy/issues/1380 [<samp>(6087f)</samp>](https://github.com/alchemy-run/alchemy/commit/6087f5d5)
+
+### &nbsp;&nbsp;&nbsp;🚀 Features
+
+- **cloudflare**:
+  - Support RPC type in Websites &nbsp;-&nbsp; by **sam** in https://github.com/alchemy-run/alchemy/issues/1372 [<samp>(a7caa)</samp>](https://github.com/alchemy-run/alchemy/commit/a7caa574)
+  - Worker delete prop &nbsp;-&nbsp; by **Michael K** in https://github.com/alchemy-run/alchemy/issues/1367 [<samp>(e2323)</samp>](https://github.com/alchemy-run/alchemy/commit/e2323df6)
+  - Workers now support bundling wasm from node_modules &nbsp;-&nbsp; by **Michael K** in https://github.com/alchemy-run/alchemy/issues/1381 [<samp>(56e17)</samp>](https://github.com/alchemy-run/alchemy/commit/56e176ff)
+
+### &nbsp;&nbsp;&nbsp;🐞 Bug Fixes
+
+- **cloudflare**: Handle "queue handler missing" error in worker resource &nbsp;-&nbsp; by **John Royal** in https://github.com/alchemy-run/alchemy/issues/1382 [<samp>(0db56)</samp>](https://github.com/alchemy-run/alchemy/commit/0db56791)
+
+##### &nbsp;&nbsp;&nbsp;&nbsp;[View changes on GitHub](https://github.com/alchemy-run/alchemy/compare/v0.90.1...v0.91.0)
+
+---
+
 ## v0.90.1
 
 ### &nbsp;&nbsp;&nbsp;🐞 Bug Fixes
