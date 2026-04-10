@@ -8,7 +8,7 @@ export interface WorkflowProps {
    *
    * @maxLength 64
    * @minLength 1
-   * @default - ${app}-${id}-${stage}
+   * @default - className if provided, otherwise id
    */
   workflowName?: string;
   /**
@@ -56,7 +56,7 @@ export type Workflow<PARAMS = unknown> = {
    */
   _PARAMS: PARAMS;
   id: string;
-  workflowName?: string;
+  workflowName: string;
   className: string;
   scriptName?: string;
   limits?: {
@@ -84,13 +84,14 @@ export function Workflow<PARAMS = unknown>(
   id: string,
   props: WorkflowProps = {},
 ): Workflow<PARAMS> {
-  const className = props.className ?? props.workflowName ?? id;
+  const workflowName = props.workflowName ?? props.className ?? id;
+  const className = props.className ?? workflowName;
 
   return {
     type: "workflow",
     _PARAMS: undefined!,
     id,
-    workflowName: props.workflowName,
+    workflowName,
     className,
     scriptName: props.scriptName,
     limits: props.limits,
