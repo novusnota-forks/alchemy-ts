@@ -1,3 +1,17 @@
+## v0.92.0
+
+### &nbsp;&nbsp;&nbsp;🚀 Features
+
+- **cloudflare**: Send email binding support &nbsp;-&nbsp; by **Dawson** and **John Royal** in https://github.com/alchemy-run/alchemy/issues/1388 [<samp>(de51e)</samp>](https://github.com/alchemy-run/alchemy/commit/de51ea37)
+
+### &nbsp;&nbsp;&nbsp;🐞 Bug Fixes
+
+- **cloudflare**: Remove agw scopes &nbsp;-&nbsp; by **Matt** in https://github.com/alchemy-run/alchemy/issues/1387 [<samp>(5349d)</samp>](https://github.com/alchemy-run/alchemy/commit/5349deb6)
+
+##### &nbsp;&nbsp;&nbsp;&nbsp;[View changes on GitHub](https://github.com/alchemy-run/alchemy/compare/v0.91.2...v0.92.0)
+
+---
+
 ## v0.91.2
 
 *No significant changes*
