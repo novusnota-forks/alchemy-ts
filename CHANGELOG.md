@@ -1,3 +1,13 @@
+## v0.92.2
+
+### &nbsp;&nbsp;&nbsp;🐞 Bug Fixes
+
+- **cloudflare**: Revert miniflare version &nbsp;-&nbsp; by **John Royal** [<samp>(bc15f)</samp>](https://github.com/alchemy-run/alchemy/commit/bc15f981)
+
+##### &nbsp;&nbsp;&nbsp;&nbsp;[View changes on GitHub](https://github.com/alchemy-run/alchemy/compare/v0.92.1...v0.92.2)
+
+---
+
 ## v0.92.1
 
 *No significant changes*
