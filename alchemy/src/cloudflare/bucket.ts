@@ -561,7 +561,6 @@ export async function R2Bucket(
                 : value instanceof ReadableStream
                   ? new Uint8Array(await streamToBuffer(value))
                   : value,
-          // @ts-expect-error - headers type mismatch
           options,
         );
       }
