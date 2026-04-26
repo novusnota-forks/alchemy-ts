@@ -5,10 +5,10 @@ import {
   type DockerBuildOptions,
   type ImageProps,
 } from "../docker/image.ts";
+import { pushImageToRegistry } from "../docker/registry.ts";
 import type { RemoteImage } from "../docker/remote-image.ts";
 import { Resource } from "../resource.ts";
 import { Scope } from "../scope.ts";
-import { secret } from "../secret.ts";
 import {
   createCloudflareApi,
   type CloudflareApi,
@@ -467,7 +467,6 @@ export async function Container<T>(
   }
 
   const api = await createCloudflareApi(props);
-  const credentials = await getContainerCredentials(api);
 
   const image = await Image(id, {
     name: `${api.accountId}/${name}`,
@@ -482,16 +481,24 @@ export async function Container<T>(
           platform: "linux/amd64",
           context: process.cwd(),
         },
-    registry: {
-      server: "registry.cloudflare.com",
-      username: credentials.username || credentials.user!,
-      password: secret(credentials.password),
-    },
+    image: props.image,
+    skipPush: true,
   } as ImageProps);
+
+  const credentials = await getContainerCredentials(api);
+  const pushedImage = await pushImageToRegistry(image.imageRef, {
+    server: "registry.cloudflare.com",
+    username: credentials.username || credentials.user!,
+    password: credentials.password,
+  });
 
   return {
     ...output,
-    image,
+    image: {
+      ...image,
+      imageRef: pushedImage.imageRef,
+      repoDigest: pushedImage.repoDigest,
+    },
   };
 }
 
