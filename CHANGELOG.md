@@ -1,3 +1,13 @@
+## v0.93.2
+
+### &nbsp;&nbsp;&nbsp;🐞 Bug Fixes
+
+- **cloudflare**: Auto-allow trycloudflare hosts in vite when dev.tunnel is set &nbsp;-&nbsp; by **yan** in https://github.com/alchemy-run/alchemy/issues/1395 [<samp>(5fc92)</samp>](https://github.com/alchemy-run/alchemy/commit/5fc925a6)
+
+##### &nbsp;&nbsp;&nbsp;&nbsp;[View changes on GitHub](https://github.com/alchemy-run/alchemy/compare/v0.93.1...v0.93.2)
+
+---
+
 ## v0.93.1
 
 ### &nbsp;&nbsp;&nbsp;🚀 Features
