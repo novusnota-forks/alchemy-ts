@@ -1,3 +1,20 @@
+## v0.93.1
+
+### &nbsp;&nbsp;&nbsp;🚀 Features
+
+- **cloudflare**: Support overrideExistingOrigin on CustomDomain &nbsp;-&nbsp; by **Xin Chen** in https://github.com/alchemy-run/alchemy/issues/1384 [<samp>(95294)</samp>](https://github.com/alchemy-run/alchemy/commit/952943cb)
+
+### &nbsp;&nbsp;&nbsp;🐞 Bug Fixes
+
+- **cloudflare**:
+  - Wire dev.tunnel through Vite/Website spawn path &nbsp;-&nbsp; by **yan** and **Sam Goodwin** in https://github.com/alchemy-run/alchemy/issues/1394 [<samp>(9e6ee)</samp>](https://github.com/alchemy-run/alchemy/commit/9e6eeea3)
+  - Repair AI Search binding support in `alchemy dev` &nbsp;-&nbsp; by **Gabriel Massadas** in https://github.com/alchemy-run/alchemy/issues/1391 [<samp>(bfc4d)</samp>](https://github.com/alchemy-run/alchemy/commit/bfc4d4e3)
+  - Defer container registry credential resolution &nbsp;-&nbsp; by **Christian Klotz** in https://github.com/alchemy-run/alchemy/issues/1389 [<samp>(143db)</samp>](https://github.com/alchemy-run/alchemy/commit/143db28b)
+
+##### &nbsp;&nbsp;&nbsp;&nbsp;[View changes on GitHub](https://github.com/alchemy-run/alchemy/compare/v0.93.0...v0.93.1)
+
+---
+
 ## v0.93.0
 
 ### &nbsp;&nbsp;&nbsp;🚀 Features
