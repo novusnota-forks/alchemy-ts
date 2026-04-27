@@ -1,3 +1,13 @@
+## v0.93.3
+
+### &nbsp;&nbsp;&nbsp;🐞 Bug Fixes
+
+- **cloudflare**: Upgrade miniflare/wrangler and move to deps &nbsp;-&nbsp; by **sam** and **John Royal** in https://github.com/alchemy-run/alchemy/issues/1396 [<samp>(74663)</samp>](https://github.com/alchemy-run/alchemy/commit/746639e1)
+
+##### &nbsp;&nbsp;&nbsp;&nbsp;[View changes on GitHub](https://github.com/alchemy-run/alchemy/compare/v0.93.2...v0.93.3)
+
+---
+
 ## v0.93.2
 
 ### &nbsp;&nbsp;&nbsp;🐞 Bug Fixes
