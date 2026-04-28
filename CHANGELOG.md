@@ -1,3 +1,13 @@
+## v0.93.4
+
+### &nbsp;&nbsp;&nbsp;🚀 Features
+
+- **cloudflare**: Enable local explorer &nbsp;-&nbsp; by **John Royal** in https://github.com/alchemy-run/alchemy/issues/1397 [<samp>(b474e)</samp>](https://github.com/alchemy-run/alchemy/commit/b474e174)
+
+##### &nbsp;&nbsp;&nbsp;&nbsp;[View changes on GitHub](https://github.com/alchemy-run/alchemy/compare/v0.93.3...v0.93.4)
+
+---
+
 ## v0.93.3
 
 ### &nbsp;&nbsp;&nbsp;🐞 Bug Fixes
