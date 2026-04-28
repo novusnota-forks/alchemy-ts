@@ -1,3 +1,13 @@
+## v0.93.5
+
+### &nbsp;&nbsp;&nbsp;🐞 Bug Fixes
+
+- **cloudflare**: Use container ingress interceptor image &nbsp;-&nbsp; by **John Royal** in https://github.com/alchemy-run/alchemy/issues/1398 [<samp>(e7d68)</samp>](https://github.com/alchemy-run/alchemy/commit/e7d68006)
+
+##### &nbsp;&nbsp;&nbsp;&nbsp;[View changes on GitHub](https://github.com/alchemy-run/alchemy/compare/v0.93.4...v0.93.5)
+
+---
+
 ## v0.93.4
 
 ### &nbsp;&nbsp;&nbsp;🚀 Features
