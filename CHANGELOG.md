@@ -1,3 +1,14 @@
+## v0.93.7
+
+### &nbsp;&nbsp;&nbsp;🚀 Features
+
+- **cli**: Add `alchemy state` commands (tree, list, get) &nbsp;-&nbsp; by **sam** in https://github.com/alchemy-run/alchemy/issues/1400 [<samp>(ec7be)</samp>](https://github.com/alchemy-run/alchemy/commit/ec7be738)
+- **cloudflare**: Add Zero Trust Access resources &nbsp;-&nbsp; by **Gabriel Massadas** in https://github.com/alchemy-run/alchemy/issues/1399 [<samp>(e0ad2)</samp>](https://github.com/alchemy-run/alchemy/commit/e0ad23f4)
+
+##### &nbsp;&nbsp;&nbsp;&nbsp;[View changes on GitHub](https://github.com/alchemy-run/alchemy/compare/v0.93.6...v0.93.7)
+
+---
+
 ## v0.93.6
 
 *No significant changes*
