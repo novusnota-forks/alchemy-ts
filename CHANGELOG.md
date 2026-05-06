@@ -1,3 +1,13 @@
+## v0.93.8
+
+### &nbsp;&nbsp;&nbsp;🐞 Bug Fixes
+
+- **stripe**: Coerce Price *_decimal fields to string &nbsp;-&nbsp; by **Jordan** in https://github.com/alchemy-run/alchemy/issues/1401 [<samp>(97180)</samp>](https://github.com/alchemy-run/alchemy/commit/97180812)
+
+##### &nbsp;&nbsp;&nbsp;&nbsp;[View changes on GitHub](https://github.com/alchemy-run/alchemy/compare/v0.93.7...v0.93.8)
+
+---
+
 ## v0.93.7
 
 ### &nbsp;&nbsp;&nbsp;🚀 Features
