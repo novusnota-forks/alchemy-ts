@@ -510,6 +510,7 @@ export async function R2Bucket(
       return headObject(await api(), {
         bucketName: bucket.name,
         key,
+        jurisdiction: bucket.jurisdiction,
       });
     },
     get: async (key: string) => {
@@ -524,6 +525,7 @@ export async function R2Bucket(
       const response = await getObject(await api(), {
         bucketName: bucket.name,
         key,
+        jurisdiction: bucket.jurisdiction,
       });
       if (response.ok) {
         return parseR2Object(key, response);
@@ -572,6 +574,7 @@ export async function R2Bucket(
         key: key,
         object: value,
         options: options,
+        jurisdiction: bucket.jurisdiction,
       });
       const body = (await response.json()) as {
         result: {
@@ -598,6 +601,7 @@ export async function R2Bucket(
       return deleteObject(await api(), {
         bucketName: bucket.name,
         key: key,
+        jurisdiction: bucket.jurisdiction,
       });
     },
   };
@@ -1242,12 +1246,17 @@ export async function getBucketLockRules(
 
 export async function headObject(
   api: CloudflareApi,
-  { bucketName, key }: { bucketName: string; key: string },
+  {
+    bucketName,
+    key,
+    jurisdiction,
+  }: { bucketName: string; key: string; jurisdiction?: R2BucketJurisdiction },
 ): Promise<R2ObjectMetadata | null> {
   const response = await withRetries(
     async () =>
       await api.get(
         `/accounts/${api.accountId}/r2/buckets/${bucketName}/objects/${key}`,
+        { headers: withJurisdiction({ jurisdiction }) },
       ),
   );
   // for some reason HEAD returns 404 for keys that exist, this is the best we can do without using S3 API
@@ -1272,16 +1281,23 @@ const withRetries = (f: () => Promise<Response>) => {
 
 export async function getObject(
   api: CloudflareApi,
-  { bucketName, key }: { bucketName: string; key: string },
+  {
+    bucketName,
+    key,
+    jurisdiction,
+  }: { bucketName: string; key: string; jurisdiction?: R2BucketJurisdiction },
 ) {
   return await withRetries(async () => {
     const response = await api.get(
       `/accounts/${api.accountId}/r2/buckets/${bucketName}/objects/${key}`,
       {
-        headers: {
-          "Content-Type": "application/octet-stream",
-          Accept: "application/octet-stream",
-        },
+        headers: withJurisdiction(
+          { jurisdiction },
+          {
+            "Content-Type": "application/octet-stream",
+            Accept: "application/octet-stream",
+          },
+        ),
       },
     );
     if (!response.ok && response.status !== 404) {
@@ -1349,21 +1365,26 @@ export async function putObject(
     key,
     object,
     options,
+    jurisdiction,
   }: {
     bucketName: string;
     key: string;
     object: PutObjectObject;
     options?: Pick<R2PutOptions, "httpMetadata">;
+    jurisdiction?: R2BucketJurisdiction;
   },
 ): Promise<Response> {
   // Using withExponentialBackoff for reliability
   return await withRetries(async () => {
-    const headers: Record<string, string> = {
-      "Content-Type": "application/octet-stream",
-      ...(options?.httpMetadata
-        ? mapHttpMetadataToHeaders(options?.httpMetadata)
-        : {}),
-    };
+    const headers: Record<string, string> = withJurisdiction(
+      { jurisdiction },
+      {
+        "Content-Type": "application/octet-stream",
+        ...(options?.httpMetadata
+          ? mapHttpMetadataToHeaders(options?.httpMetadata)
+          : {}),
+      },
+    );
 
     const response = await api.put(
       `/accounts/${api.accountId}/r2/buckets/${bucketName}/objects/${key}`,
@@ -1381,11 +1402,16 @@ export async function putObject(
 
 export async function deleteObject(
   api: CloudflareApi,
-  { bucketName, key }: { bucketName: string; key: string },
+  {
+    bucketName,
+    key,
+    jurisdiction,
+  }: { bucketName: string; key: string; jurisdiction?: R2BucketJurisdiction },
 ) {
   return await withRetries(async () => {
     const response = await api.delete(
       `/accounts/${api.accountId}/r2/buckets/${bucketName}/objects/${key}`,
+      { headers: withJurisdiction({ jurisdiction }) },
     );
 
     if (!response.ok && response.status !== 404) {
