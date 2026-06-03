@@ -101,7 +101,7 @@ const container = await Container<MyContainer>("my-container", {
 ### Build an Image first
 
 ```ts
-const image = await Image("my-image", { 
+const image = await Image("my-image", {
   name: "my-image",
   tag: "latest",
   build: {
@@ -118,8 +118,8 @@ const container = await Container<MyContainer>("my-container", {
 ### Pull a RemoteImage explcictly
 
 ```ts
-const remoteImage =  await RemoteImage("alpine", { 
-  image: "alpine:latest" 
+const remoteImage =  await RemoteImage("alpine", {
+  image: "alpine:latest"
 });
 
 const container = await Container<MyContainer>("my-container", {
@@ -182,6 +182,22 @@ Error checking if container is ready: connect(): Connection refused: container p
 ```
 
 This warning can be safely ignored - the binding still works correctly and this is expected behavior during container startup.
+
+## Placement Constraints
+
+You can restrict where your containers run using the `constraints` option:
+
+```ts
+const container = await Container<MyContainer>("my-container", {
+  className: "MyContainer",
+  constraints: {
+    regions: ["ENAM", "WNAM"],
+    jurisdiction: "fedramp",
+  },
+});
+```
+
+See the [Cloudflare placement documentation](https://developers.cloudflare.com/containers/platform-details/placement/) for full details.
 
 ## Rollout Configuration
 

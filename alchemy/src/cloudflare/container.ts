@@ -95,6 +95,14 @@ interface ContainerPropsBase extends Partial<CloudflareApiOptions> {
    * Defines how updates are deployed across instances.
    */
   rollout?: ContainerApplicationRollout;
+
+  /**
+   * Placement constraints that control which regions or jurisdictions
+   * the container is allowed to run in.
+   *
+   * @see https://developers.cloudflare.com/containers/platform-details/placement/
+   */
+  constraints?: Constraints;
 }
 
 /**
@@ -161,6 +169,17 @@ interface ContainerPropsWithBuild extends ContainerPropsBase {
  *   build: {
  *     context: "./app",
  *     dockerfile: "Dockerfile"
+ *   }
+ * });
+ *
+ * @example
+ * // Restricting placement to specific regions and a compliance jurisdiction
+ * const container = await Container("my-container", {
+ *   className: "MyContainer",
+ *   image: "nginx:alpine",
+ *   constraints: {
+ *     regions: ["ENAM", "WNAM"],
+ *     jurisdiction: "fedramp"
  *   }
  * });
  */
@@ -270,6 +289,12 @@ export type Container<T = any> = {
   rollout?: ContainerApplicationRollout;
 
   /**
+   * Placement constraints that control which regions or jurisdictions
+   * the container is allowed to run in.
+   */
+  constraints?: Constraints;
+
+  /**
    * @internal
    * Phantom type parameter for additional type safety
    */
@@ -351,6 +376,7 @@ export async function Container<T>(
     dev: props.dev,
     adopt: props.adopt,
     rollout: props.rollout,
+    constraints: props.constraints,
   };
 
   const isDev = scope.local && !props.dev?.remote;
@@ -625,6 +651,14 @@ export interface ContainerApplicationProps extends CloudflareApiOptions {
   rollout?: ContainerApplicationRollout;
 
   /**
+   * Placement constraints that control which regions or jurisdictions
+   * the container is allowed to run in.
+   *
+   * @see https://developers.cloudflare.com/containers/platform-details/placement/
+   */
+  constraints?: Constraints;
+
+  /**
    * Whether to adopt an existing container application with the same name.
    *
    * If `true`, the resource will attempt to adopt an existing container application
@@ -669,6 +703,45 @@ export type SchedulingPolicy =
   | "fill_metals"
   | "default"
   | (string & {});
+
+/**
+ * Cloudflare geographic region codes for container placement.
+ *
+ * @see https://developers.cloudflare.com/containers/platform-details/placement/
+ */
+export type Region =
+  | "AFR"
+  | "APAC"
+  | "EEUR"
+  | "ENAM"
+  | "WNAM"
+  | "ME"
+  | "OC"
+  | "SAM"
+  | "WEUR"
+  | (string & {});
+
+/**
+ * Compliance jurisdiction for container placement.
+ */
+export type Jurisdiction = "eu" | "fedramp" | (string & {});
+
+/**
+ * Placement constraints for controlling where Cloudflare Containers run.
+ *
+ * @see https://developers.cloudflare.com/containers/platform-details/placement/
+ */
+export interface Constraints {
+  /**
+   * Restrict placement to specific geographic regions (e.g. `["ENAM", "WNAM"]`).
+   * See {@link Region} for valid values.
+   */
+  regions?: Region[];
+  /**
+   * Compliance jurisdiction restricting which regions are eligible.
+   */
+  jurisdiction?: Jurisdiction;
+}
 
 /**
  * A ContainerApplication resource representing a managed container deployment.
@@ -808,6 +881,13 @@ export const ContainerApplication = Resource(
         },
       },
     };
+    const constraints = props.constraints
+      ? {
+          regions: props.constraints.regions,
+          jurisdiction: props.constraints.jurisdiction,
+        }
+      : undefined;
+
     if (this.phase === "update" && this.output?.id) {
       const application = await updateContainerApplication(
         api,
@@ -816,6 +896,7 @@ export const ContainerApplication = Resource(
           instances: props.instances ?? 1,
           max_instances: props.maxInstances ?? 10,
           scheduling_policy: props.schedulingPolicy ?? "default",
+          constraints,
           configuration,
         },
       );
@@ -852,9 +933,7 @@ export const ContainerApplication = Resource(
                 namespace_id: props.durableObjects.namespaceId,
               }
             : undefined,
-          constraints: {
-            tier: 1,
-          },
+          constraints,
           configuration: {
             image: imageReference,
             instance_type: props.instanceType ?? "dev",
@@ -894,6 +973,7 @@ export const ContainerApplication = Resource(
                 props.maxInstances ?? existingApplication.max_instances,
               scheduling_policy:
                 props.schedulingPolicy ?? existingApplication.scheduling_policy,
+              constraints,
               configuration,
             },
           );
@@ -949,9 +1029,17 @@ export interface ContainerApplicationData {
 
   /** Resource and placement constraints for the application */
   constraints: {
-    /** Infrastructure tier level (higher numbers indicate more resources) */
-    tier: number;
-
+    /**
+     * Infrastructure tier level assigned by Cloudflare (higher means more resources).
+     * @deprecated The API is migrating to `tiers`; may be absent on newer applications.
+     */
+    tier?: number;
+    /** Infrastructure tiers assigned by Cloudflare (replacement for `tier`) */
+    tiers?: number[];
+    /** Geographic regions the application is restricted to */
+    regions?: Region[];
+    /** Compliance jurisdiction */
+    jurisdiction?: Jurisdiction;
     /** Additional constraint properties that may be added by Cloudflare */
     [key: string]: any;
   };
@@ -1099,7 +1187,21 @@ export interface CreateContainerApplicationBody {
   };
   instances?: number;
   scheduling_policy?: string;
-  constraints?: { tier: number };
+  constraints?: {
+    /** Geographic regions the application is restricted to */
+    regions?: Region[];
+    /** City airport codes the application is restricted to (e.g. "MAD", "SFO") */
+    cities?: string[];
+    /**
+     * Infrastructure tier the application is restricted to.
+     * @deprecated The API is migrating to `tiers`; prefer `tiers` instead.
+     */
+    tier?: number;
+    /** Infrastructure tiers the application is restricted to */
+    tiers?: number[];
+    /** Compliance jurisdiction */
+    jurisdiction?: Jurisdiction;
+  };
   affinities?: {
     colocation?: "datacenter";
   };
@@ -1174,30 +1276,6 @@ export async function createContainerApplication(
     `Failed to create container application: ${result.errors?.map((e) => `[${e.code}] ${e.message}`).join(", ") ?? "Unknown error"}`,
   );
 }
-type Region =
-  | "AFR"
-  | "APAC"
-  | "EEUR"
-  | "ENAM"
-  | "WNAM"
-  | "ME"
-  | "OC"
-  | "SAM"
-  | "WEUR"
-  | (string & {});
-
-type City =
-  | "AFR"
-  | "APAC"
-  | "EEUR"
-  | "ENAM"
-  | "WNAM"
-  | "ME"
-  | "OC"
-  | "SAM"
-  | "WEUR"
-  | (string & {});
-
 export type UpdateApplicationRequestBody = {
   /**
    * Number of deployments to maintain within this applicaiton. This can be used to scale the appliation up/down.
@@ -1209,10 +1287,19 @@ export type UpdateApplicationRequestBody = {
   };
   scheduling_policy?: SchedulingPolicy;
   constraints?: {
-    region?: Region;
+    /** Geographic regions the application is restricted to */
+    regions?: Region[];
+    /** City airport codes the application is restricted to (e.g. "MAD", "SFO") */
+    cities?: string[];
+    /**
+     * Infrastructure tier the application is restricted to.
+     * @deprecated The API is migrating to `tiers`; prefer `tiers` instead.
+     */
     tier?: number;
-    regions?: Array<Region>;
-    cities?: Array<City>;
+    /** Infrastructure tiers the application is restricted to */
+    tiers?: number[];
+    /** Compliance jurisdiction */
+    jurisdiction?: Jurisdiction;
   };
   /**
    * The deployment configuration of all deployments created by this application.

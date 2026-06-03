@@ -5,8 +5,8 @@ import {
   Container,
   ContainerApplication,
   createCloudflareApi,
-  getContainerApplicationByName,
   getCloudflareContainerRegistry,
+  getContainerApplicationByName,
   resolveImageName,
 } from "../../src/cloudflare/index.ts";
 import { Worker } from "../../src/cloudflare/worker.ts";
@@ -54,6 +54,40 @@ describe.sequential("Container Resource", () => {
       await make("Dockerfile.update");
     } finally {
       // delete
+      await destroy(scope);
+    }
+  });
+
+  test("constraints are set on ContainerApplication", async (scope) => {
+    const containerName = `container-test-constraints${BRANCH_PREFIX}`;
+    try {
+      await Worker(`container-test-worker-constraints${BRANCH_PREFIX}`, {
+        name: `container-test-worker-constraints${BRANCH_PREFIX}`,
+        adopt: true,
+        entrypoint: path.join(import.meta.dirname, "container-handler.ts"),
+        compatibilityFlags: ["nodejs_compat"],
+        compatibilityDate: "2025-06-24",
+        format: "esm",
+        bindings: {
+          MY_CONTAINER: await Container(containerName, {
+            className: "MyContainer",
+            name: containerName,
+            tag: "latest",
+            build: {
+              context: path.join(import.meta.dirname, "container"),
+            },
+            maxInstances: 1,
+            adopt: true,
+            constraints: {
+              regions: ["ENAM", "WNAM"],
+            },
+          }),
+        },
+      });
+
+      const app = await getContainerApplicationByName(api, containerName);
+      expect(app?.constraints?.regions).toEqual(["ENAM", "WNAM"]);
+    } finally {
       await destroy(scope);
     }
   });
