@@ -1,3 +1,13 @@
+## v0.93.11
+
+### &nbsp;&nbsp;&nbsp;🚀 Features
+
+- **cloudflare**: Update Container constraints schema &nbsp;-&nbsp; by **Julien Roubieu** in https://github.com/alchemy-run/alchemy/issues/1432 [<samp>(bd9d6)</samp>](https://github.com/alchemy-run/alchemy/commit/bd9d60e4)
+
+##### &nbsp;&nbsp;&nbsp;&nbsp;[View changes on GitHub](https://github.com/alchemy-run/alchemy/compare/v0.93.10...v0.93.11)
+
+---
+
 ## v0.93.10
 
 ### &nbsp;&nbsp;&nbsp;🐞 Bug Fixes
