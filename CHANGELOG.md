@@ -1,3 +1,15 @@
+## v0.93.12
+
+### &nbsp;&nbsp;&nbsp;🐞 Bug Fixes
+
+- **cloudflare**:
+  - Update edge preview api for remote bindings &nbsp;-&nbsp; by **John Royal** in https://github.com/alchemy-run/alchemy/issues/1434 [<samp>(2dc9c)</samp>](https://github.com/alchemy-run/alchemy/commit/2dc9ca1c)
+  - Handle domain exists &nbsp;-&nbsp; by **Michael K** in https://github.com/alchemy-run/alchemy/issues/1436 [<samp>(a202e)</samp>](https://github.com/alchemy-run/alchemy/commit/a202eb0b)
+
+##### &nbsp;&nbsp;&nbsp;&nbsp;[View changes on GitHub](https://github.com/alchemy-run/alchemy/compare/v0.93.11...v0.93.12)
+
+---
+
 ## v0.93.11
 
 ### &nbsp;&nbsp;&nbsp;🚀 Features
